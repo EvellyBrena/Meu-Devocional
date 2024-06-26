@@ -1,0 +1,98 @@
+/* Estilo geral do corpo */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f5efff;
+    margin: 0;
+    padding: 10;
+    color: #f49cbb;
+}
+
+/* Estilo do título principal */
+h1 {
+    text-align: center;
+    font-size: 2.5em;
+    color: #f49cbb;
+}
+
+/* Estilo do contêiner de busca */
+#search-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    margin-top: 20px;
+    background-color: #f5efff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Estilo dos rótulos e inputs */
+label {
+    margin-right: 10px;
+    font-size: 1.2em;
+}
+
+input {
+    margin: 5px;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #f49cbb;
+    font-size: 16px;
+    width: 60%;
+    max-width: 300px;
+}
+
+/* Estilo do resultado */
+#result {
+    margin-top: 20px;
+    background-color: #fff;
+    border: 1px solid #f49cbb;
+    border-radius: 5px;
+    padding: 15px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+    font-size: 1.2em;
+}
+
+/* Estilo das imagens */
+.img-bx img {
+    width: 20%;
+    min-width: 200px;
+    display: block;
+    margin: auto;
+    justify-content: center;
+    transition-timing-function: ease;
+    transition-duration: 0.5s;
+    transition-delay: 1s;
+}
+
+/* Estilo dos links */
+p a {
+    color: #ff78c4;
+}
+
+/* Estilo dos botões */
+button {
+    margin: 5px;
+    padding: 10px 20px;
+    border-radius: 5px;
+    border: none;
+    background-color: #f49cbb;
+    color: #f5efff;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: #ff78c4;
+}
+
+.book-item {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
