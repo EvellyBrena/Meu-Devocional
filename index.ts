@@ -25,8 +25,27 @@ async function main() {
 main()
 
 const app = express();
+app.use(express.urlencoded())
 
 app.use(express.static("frontend"));
+
+app.post("/login", async (req, res) => {
+
+  // retorna as informações do usuário que tem o email igual ao digitado
+  const user = await prisma.user.findFirst({
+    where: {
+      email: req.body.email
+    }
+  })
+
+  // verifica se o email existe
+  if (user) {
+    // email existe
+  } else {
+    // email não existe
+  }
+})
+
 
 app.listen(3000, () => {
   console.log("Server is running on http://localhost:3000");
