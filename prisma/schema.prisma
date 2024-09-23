@@ -20,4 +20,5 @@ model User {
   cell_phone String
   password String
   gender String
+  checklist Int[]
 }
