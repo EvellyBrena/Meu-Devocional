@@ -1,33 +1,72 @@
-/*
+import express, { Handler } from "express";
 import { PrismaClient } from "@prisma/client"
+import bodyParser from 'body-parser';
+import bcrypt from "bcrypt"
+import jwt from "jsonwebtoken"
+import cookieParser from "cookie-parser"
 
 const prisma = new PrismaClient()
-
-async function main() {
-  console.log("Hello World")
-  const allUsers = await prisma.user.findMany()
-  console.log(allUsers)
-}
-
-main()
-*/
-
-import express from "express";
-import { PrismaClient } from "@prisma/client"
-
-const prisma = new PrismaClient()
-
-async function main() {
-  const users = await prisma.user.findMany()
-  console.log(users)
-}
-
-main()
 
 const app = express();
+const PORT = process.env.PORT || 3000;
 
-app.use(express.static("frontend"));
+const JWT_SECRET = "1234"
 
-app.listen(3000, () => {
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(cookieParser());
+
+const authMiddleware: Handler = (req, res, next) => {
+  const token = req.cookies["token"]
+  
+
+  if (token) {
+    const payload = jwt.verify(token, JWT_SECRET) as jwt.JwtPayload
+
+    req.userId = payload.sub
+
+    return next()
+  }
+  
+  res.redirect("/login.html")
+}
+
+app.post('/register', async (req, res) => {
+  const { email, password, cell_phone, gender, firstname, lastname } = req.body;
+
+  const hashedPassword = await bcrypt.hash(password, 10);
+
+  await prisma.user.create({
+      data: {
+          email,
+          password: hashedPassword,
+          cell_phone,
+          gender,
+          nome: `${firstname} ${lastname}`
+      },
+  });
+
+  res.redirect("/login.html")
+});
+
+// Rota para login do usuário
+app.post('/login', async (req, res) => {
+  const { email, password } = req.body;
+
+  const user = await prisma.user.findFirst({ where: { email } });
+ 
+  if (!user || !(await bcrypt.compare(password, user.password))) {
+    return res.status(401).json({ message: 'Credenciais inválidas' });
+  }
+
+  const token = jwt.sign({ sub: user.id }, JWT_SECRET);
+
+  res.cookie("token", token, { maxAge: 86400000, httpOnly: true });
+
+  res.redirect("/")
+});
+
+app.get("*", express.static("frontend"));
+
+app.listen(PORT, () => {
   console.log("Server is running on http://localhost:3000");
 });
