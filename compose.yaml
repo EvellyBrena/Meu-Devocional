@@ -1,6 +1,6 @@
 services:
   app:
-    image: meudevocional:latest
+    image: vadolasi/meudevocional:latest
     ports:
       - "3000:3000"
     deploy:
