@@ -1,57 +1,57 @@
 body {
-  background-color: #f5efff;
-  color: #FF78C4;
-  font-family: Arial, sans-serif;
-  font-weight: 400;
-  font-size: 18px;
-  padding-top: 40px;
-  padding-bottom: 40px;
-  margin: 0;
-  padding-left: 10px;
-  padding-right: 10px;
+	background-color: #f5efff;
+	color: #ff78c4;
+	font-family: Arial, sans-serif;
+	font-weight: 400;
+	font-size: 18px;
+	padding-top: 40px;
+	padding-bottom: 40px;
+	margin: 0;
+	padding-left: 10px;
+	padding-right: 10px;
 }
 
 ol > li::marker {
-  font-weight: bold;
+	font-weight: bold;
 }
 
 #versiculos {
-  width: 100%;
-  max-width: 800px;
-  margin-left: auto;
-  margin-right: auto;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
+	width: 100%;
+	max-width: 800px;
+	margin-left: auto;
+	margin-right: auto;
+	font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+	display: flex;
+	flex-direction: column;
+	gap: 20px;
 }
 
 /* Estilos para telas menores (tablets e smartphones) */
 @media (max-width: 768px) {
-  body {
-      font-size: 16px;
-      padding-top: 20px;
-      padding-bottom: 20px;
-      padding-left: 5px;
-      padding-right: 5px;
-  }
+	body {
+		font-size: 16px;
+		padding-top: 20px;
+		padding-bottom: 20px;
+		padding-left: 5px;
+		padding-right: 5px;
+	}
 
-  #versiculos {
-      width: 90%;
-  }
+	#versiculos {
+		width: 90%;
+	}
 }
 
 /* Estilos para telas muito pequenas (smartphones) */
 @media (max-width: 480px) {
-  body {
-      font-size: 14px;
-      padding-top: 10px;
-      padding-bottom: 10px;
-      padding-left: 5px;
-      padding-right: 5px;
-  }
+	body {
+		font-size: 14px;
+		padding-top: 10px;
+		padding-bottom: 10px;
+		padding-left: 5px;
+		padding-right: 5px;
+	}
 
-  #versiculos {
-      width: 100%;
-  }
+	#versiculos {
+		width: 100%;
+	}
 }

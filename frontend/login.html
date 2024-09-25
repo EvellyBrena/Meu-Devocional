@@ -6,6 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="login.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <title>Formulário</title>
 </head>
 
@@ -15,7 +16,7 @@
             <img src="login.png" alt="">
         </div>
         <div class="form">
-            <form action="/login" method="post">
+            <form id="form">
                 <div class="form-header">
                     <div class="title">
                         <h1>Faça o Seu Login</h1>
@@ -41,6 +42,31 @@
             </form>
         </div>
     </div>
+    <script>
+        document.getElementById("form").addEventListener("submit", async (ev) => {
+            ev.preventDefault()
+            const email = document.getElementById("email").value
+            const password = document.getElementById("password").value
+
+            const res = await fetch("/login", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ email, password })
+            })
+
+            if (String(res.status).startsWith("2")) {
+                window.location.href = "/"
+            } else {
+                Swal.fire({
+                    icon: "error",
+                    title: "Oops...",
+                    text: (await res.json())?.message ?? "Ocorreu um erro inesperado"
+                });
+            }
+        })
+    </script>
 </body>
 
 </html>

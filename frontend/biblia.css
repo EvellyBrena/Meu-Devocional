@@ -1,158 +1,156 @@
 /* Estilo geral do corpo */
 body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: #f5efff;
-    margin: 0;
-    padding: 5%;
-    color: #f49cbb;
+	font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+	background-color: #f5efff;
+	margin: 0;
+	padding: 5%;
+	color: #f49cbb;
 }
 
 /* Estilo do título principal */
 h1 {
-    text-align: center;
-    font-size: 2.5em;
-    color: #f49cbb;
+	text-align: center;
+	font-size: 2.5em;
+	color: #f49cbb;
 }
 
 /* Estilo do contêiner de busca */
 #search-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    margin-top: 20px;
-    background-color: #f5efff;
-    padding: 20px;
-    border-radius: 10px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex-direction: column;
+	margin-top: 20px;
+	background-color: #f5efff;
+	padding: 20px;
+	border-radius: 10px;
 }
 
 /* Estilo dos rótulos e inputs */
 label {
-    margin-right: 10px;
-    font-size: 1.2em;
+	margin-right: 10px;
+	font-size: 1.2em;
 }
 
 input {
-    margin: 5px;
-    padding: 10px;
-    border-radius: 5px;
-    border: 1px solid #f49cbb;
-    font-size: 16px;
-    width: 100%;
-    max-width: 300px;
+	margin: 5px;
+	padding: 10px;
+	border-radius: 5px;
+	border: 1px solid #f49cbb;
+	font-size: 16px;
+	width: 100%;
+	max-width: 300px;
 }
 
 /* Estilo do resultado */
 #result {
-    margin-top: 20px;
-    background-color: #fff;
-    border: 1px solid #f49cbb;
-    border-radius: 5px;
-    padding: 15px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    max-width: 600px;
-    margin-left: auto;
-    margin-right: auto;
-    font-size: 1.2em;
+	margin-top: 20px;
+	background-color: #fff;
+	border: 1px solid #f49cbb;
+	border-radius: 5px;
+	padding: 15px;
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+	max-width: 600px;
+	margin-left: auto;
+	margin-right: auto;
+	font-size: 1.2em;
 }
 
 /* Estilo das imagens */
 .img-bx img {
-    width: 100%;
-    max-width: 200px;
-    display: block;
-    margin: auto;
-    transition-timing-function: ease;
-    transition-duration: 0.5s;
-    transition-delay: 1s;
+	width: 100%;
+	max-width: 200px;
+	display: block;
+	margin: auto;
+	transition-timing-function: ease;
+	transition-duration: 0.5s;
+	transition-delay: 1s;
 }
 
 /* Estilo dos links */
 p a {
-    color: #ff78c4;
+	color: #ff78c4;
 }
 
 /* Estilo dos botões */
 button {
-    margin: 5px;
-    padding: 10px 20px;
-    border-radius: 5px;
-    border: none;
-    background-color: #f49cbb;
-    color: #f5efff;
-    font-size: 16px;
-    cursor: pointer;
-    transition: background-color 0.3s;
+	margin: 5px;
+	padding: 10px 20px;
+	border-radius: 5px;
+	border: none;
+	background-color: #f49cbb;
+	color: #f5efff;
+	font-size: 16px;
+	cursor: pointer;
+	transition: background-color 0.3s;
 }
 
 button:hover {
-    background-color: #ff78c4;
+	background-color: #ff78c4;
 }
 
 /* Estilo dos capítulos */
 #capitulos {
-    display: flex;
-    align-items: center;
-    gap: 5px;
+	display: flex;
+	align-items: center;
+	gap: 5px;
 }
 
 .capitulo {
-    width: 20px;
+	width: 20px;
 }
 
 /* Estilo para o contêiner dos botões de testamento */
 #testamentos {
-    display: flex;
-    justify-content: center;
-    gap: 20px;
-    margin-top: 50px;
-    flex-wrap: wrap;
+	display: flex;
+	justify-content: center;
+	gap: 20px;
+	margin-top: 50px;
+	flex-wrap: wrap;
 }
 
 /* Estilo para os botões de testamento */
 .testamento {
-    text-align: center;
-    text-decoration: none;
-    padding: 15px 30px;
-    border-radius: 25px; /* Bordas mais arredondadas */
-    background: linear-gradient(45deg, #f49cbb, #ff7597); /* Gradiente de cor */
-    color: #fff;
-    font-size: 1.2em;
-    font-weight: bold;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    transition: background 0.3s, transform 0.3s, box-shadow 0.3s;
+	text-align: center;
+	text-decoration: none;
+	padding: 15px 30px;
+	border-radius: 25px; /* Bordas mais arredondadas */
+	background: linear-gradient(45deg, #f49cbb, #ff7597); /* Gradiente de cor */
+	color: #fff;
+	font-size: 1.2em;
+	font-weight: bold;
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+	transition: background 0.3s, transform 0.3s, box-shadow 0.3s;
 }
 
 /* Efeito de hover nos botões de testamento */
 .testamento:hover {
-    background: linear-gradient(45deg, #ff7597, #f49cbb); /* Mudança de cor no hover */
-    transform: translateY(-5px);
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+	background: linear-gradient(45deg, #ff7597, #f49cbb); /* Mudança de cor no hover */
+	transform: translateY(-5px);
+	box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
 }
 
 /* Efeito de foco nos botões de testamento */
 .testamento:focus {
-    outline: none;
-    background: linear-gradient(45deg, #ff7597, #f49cbb);
-    transform: translateY(-5px);
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+	outline: none;
+	background: linear-gradient(45deg, #ff7597, #f49cbb);
+	transform: translateY(-5px);
+	box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
 }
 
 /* Estilos para telas maiores (desktops) */
 @media only screen and (min-width: 768px) {
-    body {
-        padding: 2%;
-    }
+	body {
+		padding: 2%;
+	}
 
-    input {
-        width: 50%;
-        max-width: 400px;
-    }
+	input {
+		width: 50%;
+		max-width: 400px;
+	}
 
-    .testamento {
-        padding: 20px 40px;
-        font-size: 1.5em;
-    }
+	.testamento {
+		padding: 20px 40px;
+		font-size: 1.5em;
+	}
 }
-
-

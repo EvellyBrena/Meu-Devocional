@@ -1,113 +1,121 @@
-import express, { Handler } from "express";
-import { PrismaClient } from "@prisma/client"
-import bodyParser from 'body-parser';
-import bcrypt from "bcrypt"
-import jwt from "jsonwebtoken"
-import cookieParser from "cookie-parser"
+import { PrismaClient } from "@prisma/client";
+import bcrypt from "bcrypt";
+import bodyParser from "body-parser";
+import cookieParser from "cookie-parser";
+import express, { type Handler } from "express";
+import jwt from "jsonwebtoken";
 
 interface Annotation {
-  title: string;
-  description: string;
-  userId: string;
+	title: string;
+	description: string;
+	userId: string;
 }
 
-const prisma = new PrismaClient()
+const prisma = new PrismaClient();
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-const JWT_SECRET = "1234"
+const JWT_SECRET = "1234";
 
-app.use(bodyParser.json())
+app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
 
 const authMiddleware: Handler = (req, res, next) => {
-  const token = req.cookies["token"]
-  
+	const token = req.cookies["token"];
 
-  if (token) {
-    const payload = jwt.verify(token, JWT_SECRET) as jwt.JwtPayload
+	if (token) {
+		const payload = jwt.verify(token, JWT_SECRET) as jwt.JwtPayload;
 
-    req.userId = payload.sub
+		req.userId = payload.sub;
 
-    return next()
-  }
-  
-  res.redirect("/login.html")
-}
+		return next();
+	}
 
-app.post('/register', async (req, res) => {
-  const { email, password, cell_phone, gender, firstname, lastname } = req.body;
+	res.redirect("/login.html");
+};
 
-  const hashedPassword = await bcrypt.hash(password, 10);
+app.post("/register", async (req, res) => {
+	const { email, password, cell_phone, gender, firstname, lastname } = req.body;
 
-  await prisma.user.create({
-      data: {
-          email,
-          password: hashedPassword,
-          cell_phone,
-          gender,
-          nome: `${firstname} ${lastname}`
-      },
-  });
+	const hashedPassword = await bcrypt.hash(password, 10);
 
-  res.redirect("/login.html")
+	await prisma.user.create({
+		data: {
+			email,
+			password: hashedPassword,
+			cell_phone,
+			gender,
+			nome: `${firstname} ${lastname}`,
+		},
+	});
+
+	res.redirect("/login.html");
 });
 
 // Rota para login do usuário
-app.post('/login', async (req, res) => {
-  const { email, password } = req.body;
+app.post("/login", async (req, res) => {
+	const { email, password } = req.body;
 
-  const user = await prisma.user.findFirst({ where: { email } });
- 
-  if (!user || !(await bcrypt.compare(password, user.password))) {
-    return res.status(401).json({ message: 'Credenciais inválidas' });
-  }
+	const user = await prisma.user.findFirst({ where: { email } });
 
-  const token = jwt.sign({ sub: user.id }, JWT_SECRET);
+	if (!user || !(await bcrypt.compare(password, user.password))) {
+		return res.status(401).json({ message: "Credenciais inválidas" });
+	}
 
-  res.cookie("token", token, { maxAge: 86400000, httpOnly: true });
+	const token = jwt.sign({ sub: user.id }, JWT_SECRET);
 
-  res.redirect("/")
+	res.cookie("token", token, { maxAge: 86400000, httpOnly: true });
+
+	res.redirect("/");
 });
 
 // Rotas para Annotation
-app.post('/annotations',  authMiddleware, async (req, res) => {
-  const { title, description }: Annotation = req.body;
-  await prisma.annotation.create({
-    data: { description, userId: req.userId, Title: title },
-  });
-  res.redirect("/notas.html")
+app.post("/annotations", authMiddleware, async (req, res) => {
+	const { title, description }: Annotation = req.body;
+	await prisma.annotation.create({
+		data: { description, userId: req.userId, Title: title },
+	});
+	res.redirect("/notas.html");
 });
 
-app.get('/annotations', authMiddleware, async (req, res) => {
-  const annotations = await prisma.annotation.findMany({ where: { userId: req.userId } });
-  res.json(annotations);
+app.get("/annotations", authMiddleware, async (req, res) => {
+	const annotations = await prisma.annotation.findMany({
+		where: { userId: req.userId },
+	});
+	res.json(annotations);
 });
 
-app.get('/annotations/:id', authMiddleware, async (req, res) => {
-  const { id } = req.params;
-  const { title, description }: Annotation = req.body;
-  const annotation = await prisma.annotation.findUnique({ where: { id, userId: req.userId } });
-  res.json(annotation);
+app.get("/annotations/:id", authMiddleware, async (req, res) => {
+	const { id } = req.params;
+	const { title, description }: Annotation = req.body;
+	const annotation = await prisma.annotation.findUnique({
+		where: { id, userId: req.userId },
+	});
+	res.json(annotation);
 });
 
-app.post('/annotations/:id', authMiddleware, async (req, res) => {
-  const { id } = req.params;
-  const { title, description }: Annotation = req.body;
-  await prisma.annotation.update({where: { id,userId: req.userId},data:{description,Title:title}})
-  res.redirect("/notas.html")
+app.post("/annotations/:id", authMiddleware, async (req, res) => {
+	const { id } = req.params;
+	const { title, description }: Annotation = req.body;
+	await prisma.annotation.update({
+		where: { id, userId: req.userId },
+		data: { description, Title: title },
+	});
+	res.redirect("/notas.html");
 });
 
-app.delete('/annotations/:id', authMiddleware, async (req, res) => {
-  const { id } = req.params;
-  const annotation = await prisma.annotation.delete({where:{id,userId: req.userId}})
-  res.json(annotation);
+app.delete("/annotations/:id", authMiddleware, async (req, res) => {
+	const { id } = req.params;
+	const annotation = await prisma.annotation.delete({
+		where: { id, userId: req.userId },
+	});
+	res.json(annotation);
 });
 
 app.get("*", express.static("frontend"));
 
 app.listen(PORT, () => {
-  console.log("Server is running on http://localhost:3000");
+	console.log("Server is running on http://localhost:3000");
 });
