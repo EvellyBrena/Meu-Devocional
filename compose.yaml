@@ -3,14 +3,14 @@ services:
     image: vadolasi/meudevocional:latest
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.meudevocional.rule=Host(`portainer.vitordaniel.com`)"
+      - "traefik.http.routers.meudevocional.rule=Host(`meudevocional.vitordaniel.com`)"
       - "traefik.http.services.meudevocional.loadbalancer.server.port=3000"
       - "traefik.http.routers.meudevocional.service=meudevocional"
       - "traefik.http.routers.meudevocional.tls.certresolver=leresolver"
     deploy:
       labels:
         - "traefik.enable=true"
-        - "traefik.http.routers.meudevocional.rule=Host(`portainer.vitordaniel.com`)"
+        - "traefik.http.routers.meudevocional.rule=Host(`meudevocional.vitordaniel.com`)"
         - "traefik.http.services.meudevocional.loadbalancer.server.port=3000"
         - "traefik.http.routers.meudevocional.service=meudevocional"
         - "traefik.http.routers.meudevocional.tls.certresolver=leresolver"
