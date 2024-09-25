@@ -1,14 +1,11 @@
 services:
   app:
     image: vadolasi/meudevocional:latest
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.app.rule=Host(`meudevocional.vitordaniel.com`)"
-      - "traefik.http.services.app.loadbalancer.server.port=3000"
-      - "traefik.http.routers.app.tls.certresolver=leresolver"
     deploy:
       labels:
         - "traefik.enable=true"
         - "traefik.http.routers.app.rule=Host(`meudevocional.vitordaniel.com`)"
         - "traefik.http.services.app.loadbalancer.server.port=3000"
         - "traefik.http.routers.app.tls.certresolver=leresolver"
+    networks:
+      - traefik
