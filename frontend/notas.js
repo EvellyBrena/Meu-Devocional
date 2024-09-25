@@ -5,10 +5,69 @@ closeIcon = popupBox.querySelector("header i"),
 titleTag = popupBox.querySelector("input"),
 descTag = popupBox.querySelector("textarea"),
 addBtn = popupBox.querySelector("button");
+const form = document.querySelector("form");
 
 const months = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho",
               "Agosto", "Setembro", "Outubor", "Novembro", "Dezembro"];
-const notes = JSON.parse(localStorage.getItem("notes") || "[]");
+
+
+
+              function showMenu(elem) {
+                elem.parentElement.classList.add("show");
+                document.addEventListener("click", e => {
+                    if(e.target.tagName != "I" || e.target != elem) {
+                        elem.parentElement.classList.remove("show");
+                    }
+                });
+            }
+            
+            function deleteNote(noteId) {
+                Swal.fire({
+                    title: "Deseja mesmo deletar esta nota?",
+                    text: "Esta ação não pode ser desfeita!",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#3085d6",
+                    cancelButtonColor: "#d33",
+                    confirmButtonText: "Confirmar",
+                    cancelButtonText: "Cancelar"
+                  }).then(async (result) => {
+                    if (result.isConfirmed) {
+                        const res = await fetch(window.location.origin + "/annotations/" + noteId, { method: "DELETE" })
+
+                        if (res.ok) {
+                            showNotes()
+                                .then(() => {
+                      Swal.fire({
+                        title: "Sucesso!",
+                        text: "A anotação foi deletada!",
+                        icon: "success"
+                      })})
+
+                    } else {
+                        Swal.fire({
+                            title: "Erro!",
+                            text: "Ocorreu um erro ao deletar a anotação!",
+                            icon: "error"
+                          });
+                    }
+                    }
+                  });
+            }
+            
+            function updateNote(noteId, title, filterDesc) {
+                let description = filterDesc.replaceAll('<br/>', '\r\n');
+                updateId = noteId;
+                isUpdate = true;
+                addBox.click();
+                titleTag.value = title;
+                descTag.value = description;
+                popupTitle.innerText = "Edite a sua nota";
+                addBtn.innerText = "Editar";
+                form.action = "/annotations/" + noteId
+            }
+            
+
 let isUpdate = false, updateId;
 
 addBox.addEventListener("click", () => {
@@ -16,6 +75,7 @@ addBox.addEventListener("click", () => {
     addBtn.innerText = "Adicionar Nota";
     popupBox.classList.add("show");
     document.querySelector("body").style.overflow = "hidden";
+    form.action = "/annotations"
     if(window.innerWidth > 660) titleTag.focus();
 });
 
@@ -26,23 +86,24 @@ closeIcon.addEventListener("click", () => {
     document.querySelector("body").style.overflow = "auto";
 });
 
-function showNotes() {
-    if(!notes) return;
+async function showNotes() {
+    const res = await fetch(window.location.origin + "/annotations")
+        const notes = await res.json()
     document.querySelectorAll(".note").forEach(li => li.remove());
-    notes.forEach((note, id) => {
+    notes.forEach((note) => {
         let filterDesc = note.description.replaceAll("\n", '<br/>');
         let liTag = `<li class="note">
                         <div class="details">
-                            <p>${note.title}</p>
+                            <p>${note.Title}</p>
                             <span>${filterDesc}</span>
                         </div>
                         <div class="bottom-content">
-                            <span>${note.date}</span>
+                            <span>${note.Date}</span>
                             <div class="settings">
                                 <i onclick="showMenu(this)" class="uil uil-ellipsis-h"></i>
                                 <ul class="menu">
-                                    <li onclick="updateNote(${id}, '${note.title}', '${filterDesc}')"><i class="uil uil-pen"></i>Edite</li>
-                                    <li onclick="deleteNote(${id})"><i class="uil uil-trash"></i>Delete</li>
+                                    <li onclick="updateNote('${note.id}', '${note.Title}', '${filterDesc}')"><i class="uil uil-pen"></i>Edite</li>
+                                    <li onclick="deleteNote('${note.id}')"><i class="uil uil-trash"></i>Delete</li>
                                 </ul>
                             </div>
                         </div>
@@ -51,55 +112,3 @@ function showNotes() {
     });
 }
 showNotes();
-
-function showMenu(elem) {
-    elem.parentElement.classList.add("show");
-    document.addEventListener("click", e => {
-        if(e.target.tagName != "I" || e.target != elem) {
-            elem.parentElement.classList.remove("show");
-        }
-    });
-}
-
-function deleteNote(noteId) {
-    let confirmDel = confirm("Deseja mesmo deletar esta nota?");
-    if(!confirmDel) return;
-    notes.splice(noteId, 1);
-    localStorage.setItem("notes", JSON.stringify(notes));
-    showNotes();
-}
-
-function updateNote(noteId, title, filterDesc) {
-    let description = filterDesc.replaceAll('<br/>', '\r\n');
-    updateId = noteId;
-    isUpdate = true;
-    addBox.click();
-    titleTag.value = title;
-    descTag.value = description;
-    popupTitle.innerText = "Edite a sua nota";
-    addBtn.innerText = "Editar";
-}
-
-addBtn.addEventListener("click", e => {
-    e.preventDefault();
-    let title = titleTag.value.trim(),
-    description = descTag.value.trim();
-
-    if(title || description) {
-        let currentDate = new Date(),
-        month = months[currentDate.getMonth()],
-        day = currentDate.getDate(),
-        year = currentDate.getFullYear();
-
-        let noteInfo = {title, description, date: `${month} ${day}, ${year}`}
-        if(!isUpdate) {
-            notes.push(noteInfo);
-        } else {
-            isUpdate = false;
-            notes[updateId] = noteInfo;
-        }
-        localStorage.setItem("notes", JSON.stringify(notes));
-        showNotes();
-        closeIcon.click();
-    }
-});
