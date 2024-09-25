@@ -5,6 +5,7 @@
 	"main": "index.js",
 	"scripts": {
 		"dev": "nodemon index.ts",
+		"start": "sucrase-node index.ts",
 		"postinstall": "prisma generate"
 	},
 	"author": "",
