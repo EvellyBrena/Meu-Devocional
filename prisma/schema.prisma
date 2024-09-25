@@ -20,5 +20,14 @@ model User {
   cell_phone String
   password String
   gender String
-  checklist Int[]
+  annotation Annotation[]
+}
+
+
+model Annotation{
+  id    String @id @default(auto()) @map("_id") @db.ObjectId
+  Title String
+  description String
+  userId String  @db.ObjectId
+  user User @relation(fields: [userId],references: [id])
 }

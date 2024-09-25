@@ -5,6 +5,12 @@ import bcrypt from "bcrypt"
 import jwt from "jsonwebtoken"
 import cookieParser from "cookie-parser"
 
+interface Annotation {
+  title: string;
+  description: string;
+  userId: string;
+}
+
 const prisma = new PrismaClient()
 
 const app = express();
@@ -63,6 +69,26 @@ app.post('/login', async (req, res) => {
   res.cookie("token", token, { maxAge: 86400000, httpOnly: true });
 
   res.redirect("/")
+});
+
+// Rotas para Annotation
+app.post('/annotations', async (req, res) => {
+  const { title, description }: Annotation = req.body;
+  await prisma.annotation.create({
+    data: { description, userId: req.userId, Title: title },
+  });
+  res.redirect("/notas.html")
+});
+
+app.get('/annotations', async (req, res) => {
+  const annotations = await prisma.annotation.findMany({ where: { userId: req.userId } });
+  res.json(annotations);
+});
+
+app.get('/annotations/:id', async (req, res) => {
+  const { id } = req.params;
+  const annotation = await prisma.annotation.findUnique({ where: { id, userId: req.userId } });
+  res.json(annotation);
 });
 
 app.get("*", express.static("frontend"));
