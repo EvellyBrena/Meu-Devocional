@@ -70,3 +70,40 @@ label::after {
 	top: -6px;
 	border-radius: 50%;
 }
+/* Estilo do botão */
+button {
+	display: block;
+	width: 100px;
+	height: 100px;
+	margin: 20px auto 0 auto;
+	background: linear-gradient(to right, #68d8d6, #f2b5d4); /* Gradiente verde-rosa */
+	color: white;
+	font-size: 14px;
+	font-weight: bold;
+	border: none;
+	border-radius: 10px;
+	cursor: pointer;
+	transition: background-color 0.3s ease;
+	text-align: center;
+	align-self: flex-end; /* Garante que o botão fique no final da container */
+  }
+  
+  /* Mudança de cor ao passar o mouse */
+  button:hover {
+	background: linear-gradient(to right, #f2b5d4,  #68d8d6); /* Gradiente escurecido ao passar o mouse */
+  }
+  
+  /* Para dispositivos menores */
+  @media (max-width: 768px) {
+	.container {
+	  width: 90%;
+	  right: 5%;
+	  left: 5%;
+	  height: auto;
+	}
+  
+	button {
+	  width: 80px;
+	  height: 80px;
+	}
+  }

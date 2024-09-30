@@ -21,6 +21,7 @@ model User {
   password String
   gender String
   annotation Annotation[]
+  checklist Int[] @default([])
 }
 
 

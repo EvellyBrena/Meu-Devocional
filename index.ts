@@ -114,8 +114,49 @@ app.delete("/annotations/:id", authMiddleware, async (req, res) => {
 	res.json(annotation);
 });
 
+app.get("/checklist", authMiddleware, async (req, res) => {
+	const user = await prisma.user.findUnique({
+		where: { id: req.userId },
+	});
+	res.json(user!.checklist);
+});
+
+app.post("/checklist", authMiddleware, async (req, res) => {
+	const { numero, valor } = req.body
+	const user = await prisma.user.findUnique({
+		where: { id: req.userId },
+	});
+
+	let checklist = user!.checklist
+    
+	if (valor) {
+		checklist.push(numero)
+	} else {
+		checklist = checklist.filter(valor => valor !== numero)
+	}
+
+	const checklistSalvo = await prisma.user.update({
+		where: { id: req.userId },
+		data: {
+			checklist
+		}
+	});
+
+	res.json(checklistSalvo)
+});
+
+app.delete("/checklist", authMiddleware, async (req, res) => {
+	const user = await prisma.user.update({
+		where: { id: req.userId },
+		data: { checklist: [] }
+	});
+
+	res.json(user)
+});
+
 app.get("*", express.static("frontend"));
 
 app.listen(PORT, () => {
 	console.log("Server is running on http://localhost:3000");
 });
+
