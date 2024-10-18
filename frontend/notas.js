@@ -104,13 +104,15 @@ async function showNotes() {
 	document.querySelectorAll(".note").forEach((li) => li.remove());
 	notes.forEach((note) => {
 		const filterDesc = note.description.replaceAll("\n", "<br/>");
+		const data = new Date(note.Date);
+		let dataFormatada = data.getDate()  + "/" + (data.getMonth()+1) + "/" + data.getFullYear();
 		const liTag = `<li class="note">
                         <div class="details">
                             <p>${note.Title}</p>
                             <span>${filterDesc}</span>
                         </div>
                         <div class="bottom-content">
-                            <span>${note.Date}</span>
+                            <span>${dataFormatada}</span>
                             <div class="settings">
                                 <i onclick="showMenu(this)" class="uil uil-ellipsis-h"></i>
                                 <ul class="menu">
