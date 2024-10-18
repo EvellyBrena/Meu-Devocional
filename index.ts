@@ -5,8 +5,11 @@ import cookieParser from "cookie-parser";
 import express, { type Handler } from "express";
 import jwt from "jsonwebtoken";
 import { Resend } from "resend"
+import dotenv from "dotenv"
 
-const resend = new Resend("re_ABMhNLfx_8EPgMb2tUKXnDEjuDYhRNZw7")
+dotenv.config()
+
+const resend = new Resend(process.env.RESEND_API_KEY!)
 
 interface Annotation {
 	title: string;
@@ -19,8 +22,6 @@ const prisma = new PrismaClient();
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-const JWT_SECRET = "1234";
-
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
@@ -29,7 +30,7 @@ const authMiddleware: Handler = (req, res, next) => {
 	const token = req.cookies["token"];
 
 	if (token) {
-		const payload = jwt.verify(token, JWT_SECRET) as jwt.JwtPayload;
+		const payload = jwt.verify(token, process.env.JWT_SECRET!) as jwt.JwtPayload;
 
 		req.userId = payload.sub;
 
@@ -67,7 +68,7 @@ app.post("/login", async (req, res) => {
 		return res.status(401).json({ message: "Credenciais inválidas" });
 	}
 
-	const token = jwt.sign({ sub: user.id }, JWT_SECRET);
+	const token = jwt.sign({ sub: user.id }, process.env.JWT_SECRET!);
 
 	res.cookie("token", token, { maxAge: 86400000, httpOnly: true });
 
@@ -160,22 +161,75 @@ app.delete("/checklist", authMiddleware, async (req, res) => {
 app.post("/esqueci-senha", async (req, res) => {
 	const { email } = req.body
 
+	if (!email) {
+		return res.status(400).json({ status: "erro" })
+	}
+
 	const usuario = await prisma.user.findFirst({
 		where: { email }
 	})
 
 	if (usuario) {
+		const token = jwt.sign({ email: usuario.email }, process.env.JWT_SECRET!, { expiresIn: "15m" });
+
 		await resend.emails.send({
 			from: "naoresponder@meudevocional.vitordaniel.com",
 			to: usuario.email,
 			subject: "Recuperar senha",
-			html: `<h1>Olá ${usuario.nome}!</h1>`
+			html: `
+				<h1>Recuperação de senha!</h1>
+				<p>Clique no link abaixo para recuperar a sua senha. O link é válido por 15 minutos.</p>
+				<p>Caso você não tenha feito essa solicitação, por favor ignore este email.</p>
+				<a href="${process.env.SITE_URL}/recuperar-senha?token=${token}">Recuperar senha</a>
+			`
 		})
 
 		return res.json({ status: "ok" })
 	}
 
 	res.status(404).json({ status: "erro" })
+})
+
+app.get("/recuperar-senha", (req, res) => {
+	const { token } = req.query
+
+	if (!token || typeof token !== "string") {
+		return res.status(400).json({ message: "Token inválido" })
+	}
+
+	const { email } = jwt.verify(token, process.env.JWT_SECRET!) as jwt.JwtPayload;
+
+	if (!email) {
+		return res.status(400).json({ message: "Token inválido" })
+	}
+
+	res.json({ status: "ok" })
+})
+
+app.post("/mudar-senha", async (req, res) => {
+	const { token } = req.query
+	const { senha } = req.body
+
+	if (!senha) {
+		res.status(400).json({ message: "Digite uma senha válida!" })
+	}
+
+	if (!token || typeof token !== "string") {
+		return res.status(400).json({ message: "Token inválido" })
+	}
+
+	const { email } = jwt.verify(token, process.env.JWT_SECRET!) as jwt.JwtPayload;
+
+	if (!email) {
+		return res.status(400).json({ message: "Token inválido" })
+	}
+
+	await prisma.user.updateMany({
+		where: { email },
+		data: { password: await bcrypt.hash(senha, 10) }
+	})
+
+	res.json({ status: "ok" })
 })
 
 app.get("*", express.static("frontend"));
