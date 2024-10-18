@@ -4,6 +4,9 @@ import bodyParser from "body-parser";
 import cookieParser from "cookie-parser";
 import express, { type Handler } from "express";
 import jwt from "jsonwebtoken";
+import { Resend } from "resend"
+
+const resend = new Resend("re_ABMhNLfx_8EPgMb2tUKXnDEjuDYhRNZw7")
 
 interface Annotation {
 	title: string;
@@ -154,9 +157,29 @@ app.delete("/checklist", authMiddleware, async (req, res) => {
 	res.json(user)
 });
 
+app.post("/esqueci-senha", async (req, res) => {
+	const { email } = req.body
+
+	const usuario = await prisma.user.findFirst({
+		where: { email }
+	})
+
+	if (usuario) {
+		await resend.emails.send({
+			from: "naoresponder@meudevocional.vitordaniel.com",
+			to: usuario.email,
+			subject: "Recuperar senha",
+			html: `<h1>Olá ${usuario.nome}!</h1>`
+		})
+
+		return res.json({ status: "ok" })
+	}
+
+	res.status(404).json({ status: "erro" })
+})
+
 app.get("*", express.static("frontend"));
 
 app.listen(PORT, () => {
 	console.log("Server is running on http://localhost:3000");
 });
-
