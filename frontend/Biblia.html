@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bíblia Sagrada</title>
+    <link rel="stylesheet" href="background_styles.css">
+    <link rel="stylesheet" href="biblia.css">
+</head>
+<body>
+    <div class="text-bx">
+        <br> 
+        <b><h1>Bíblia Sagrada</h1></b> 
+        <br>
+    </div>
+    <div class="img-bx">
+        <img src="bibliaa.png" alt="Bíblia">
+    </div>
+
+    <h1><i>Busca de Versículos da Bíblia 🔎</i></h1>
+    <div id="search-container">
+        <label for="book">Livro:</label>
+        <input type="text" id="book" name="book" placeholder="Ex.: João">
+        <label for="chapter">Capítulo:</label>
+        <input type="number" min="1" step="1" max="150" id="chapter" placeholder="Ex.: 3">
+        <label for="verse">Versículo:</label>
+        <input type="text" id="verse" placeholder="Ex.: 16">
+        <button id="searchButton">Buscar Versículo</button>
+    </div>
+
+    <div id="testamentos">
+        <a class="testamento" href="testamento.html#vt">Antigo<br />Testamento</a>
+        <a class="testamento" href="testamento.html#nt">Novo<br />Testamento</a>
+    </div>
+
+    <script src="./biblia.js" type="module"></script>
+</body>
+</html>
+

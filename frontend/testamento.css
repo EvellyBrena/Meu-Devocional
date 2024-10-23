@@ -1,0 +1,124 @@
+/* Estilo para o body */
+body {
+	font-family: Arial, sans-serif;
+	background-color: #f5efff; /* Cor de fundo */
+	color: #f2b5d4; /* Cor da letra */
+	margin: 0;
+	padding: 0;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: flex-start;
+	min-height: 100vh;
+}
+
+/* Estilo para o título */
+#titulo {
+	color: #f2b5d4; /* Cor da letra */
+	font-size: 2.5em;
+	margin: 20px 0;
+	text-align: center;
+}
+
+/* Estilo para a lista de livros */
+#book-list {
+	width: 90%; /* Reduz a largura da lista de livros */
+	max-width: 600px; /* Ajusta a largura máxima */
+	background: #f5efff;
+	border-radius: 8px;
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+	padding: 20px;
+	box-sizing: border-box;
+	overflow-y: auto;
+	margin-top: 20px; /* Espaçamento superior */
+}
+
+/* Estilo para os itens da lista */
+.book-item {
+	padding: 10px;
+	border-bottom: 1px solid #ddd;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	color: #f2b5d4; /* Cor da letra dos itens da lista */
+}
+
+/* Estilo para os títulos dos livros */
+.book-item h3 {
+	margin: 0;
+	font-size: 1.2em;
+}
+
+/* Estilo para os links dos livros */
+.book-item a {
+	color: #f2b5d4; /* Cor da letra dos links */
+	text-decoration: none;
+	font-size: 1em;
+}
+
+/* Estilo para os últimos itens da lista (sem borda inferior) */
+.book-item:last-child {
+	border-bottom: none;
+}
+
+/* Estilo para o contêiner dos botões de testamento */
+#testamentos {
+	display: flex;
+	justify-content: center;
+	gap: 20px;
+	margin-top: 30px;
+}
+
+/* Estilo para os botões de testamento */
+.testamento {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	height: 80px;
+	width: 150px;
+	border: 2px solid var(--primary-color);
+	text-decoration: none;
+	background-color: transparent;
+	color: var(--primary-color);
+	font-size: 1.2em;
+	font-weight: bold;
+	transition: all 300ms ease;
+	cursor: pointer;
+	box-shadow: 0 0 12px transparent;
+}
+
+/* Efeito de hover nos botões de testamento */
+.testamento:hover {
+	background-color: var(--hover-color);
+	box-shadow: 0 0 12px var(--primary-color);
+	transform: scale(1.05);
+}
+
+/* Efeito de foco nos botões de testamento */
+.testamento:focus {
+	outline: none;
+	background-color: var(--hover-color);
+	box-shadow: 0 0 12px var(--primary-color);
+	transform: scale(1.05);
+}
+
+/* Estilos para telas menores */
+@media only screen and (max-width: 768px) {
+	#book-list {
+		width: 90%;
+		max-width: none;
+	}
+
+	.testamento {
+		width: 120px;
+	}
+}
+
+@media only screen and (max-width: 480px) {
+	.testamento {
+		width: 100px;
+		font-size: 1em;
+	}
+}
+
+/* Estilo para o body */

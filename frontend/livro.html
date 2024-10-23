@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     <link rel="stylesheet" href="livro.css">
+    <title>Capítulos da Bíblia</title>
+</head>
+<body>
+    <h1 id="nome"></h1>
+    <div id="capitulos"></div>
+    <script>
+        fetch("https://www.abibliadigital.com.br/api/books/" + window.location.hash.replace("#", ""), {
+            headers: {
+                Authorization: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdHIiOiJXZWQgSnVuIDA1IDIwMjQgMTQ6MzQ6NTAgR01UKzAwMDAudml0b3IwMzZkYW5pZWxAZ21haWwuY29tIiwiaWF0IjoxNzE3NTk4MDkwfQ.O-I87RQ_1EV-agG9qGCb4vTA3oGDXnH4tJPG8k-m_pc"
+            }
+        })
+        .then(response => response.json())
+        .then(book => {
+            const boxcapitulos = document.querySelector("#capitulos");
+            document.querySelector("#nome").innerText = book.name;
+
+            for (let i = 1; i <= book.chapters; i++) {
+                const capitulo = document.createElement("a");
+                capitulo.classList.add("capitulo");
+                capitulo.href = "capitulo.html#" + book.abbrev.pt + "-" + i;
+                capitulo.textContent = i;
+                boxcapitulos.appendChild(capitulo);
+            }
+        })
+        .catch(error => {
+            console.error('Erro ao buscar capítulos:', error);
+        });
+
+  
+
+    </script>
+</body>
+</html>

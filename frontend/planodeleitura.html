@@ -1,0 +1,178 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="planodeleitura.css">
+    <title>Plano de Leitura</title>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+  </head>
+  <body>
+     <div class="text-bx">
+       <b> <h1> Plano de Leitura </h1> </b> 
+         <p>
+     Quer ler a Bíblia durante 1 ano? Aqui está um plano de leitura anual.
+         </p>
+     
+       <i> <b>Escondi a tua palavra no meu coração, para eu não pecar contra ti. <br>
+         
+
+                                                         Salmos 119:11 </br>
+       </i> </b> 
+
+    </div>
+
+    <div class="img-bx">
+        <img src="bible.png">
+    </div>
+     
+
+
+    <div class="container">
+      <div class="radio-tile-group">
+
+        <div class="input-container">
+          <input id="walk" type="radio" name="radio" onchange="window.location.href='checks/checklist.html'">
+          <div class="radio-tile">
+            <ion-icon name="book-outline"></ion-icon>
+            <label for="Janeiro">Janeiro</label>
+          </div>
+        </div>
+
+        <div class="input-container">
+          <input id="bike" type="radio" name="radio" onchange="window.location.href='checks/checklist2.html'">
+          <div class="radio-tile">
+            <ion-icon name="book-outline"></ion-icon>
+            <label for="Fevereiro">Fevereiro</label>
+          </div>
+        </div>
+
+        <div class="input-container">
+          <input id="car" type="radio" name="radio" onchange="window.location.href='checks/checklist3.html'">
+          <div class="radio-tile" >
+            <ion-icon name="book-outline"></ion-icon>
+            <label for="Março">Março</label>
+          </div>
+        </div>
+
+        <div class="input-container">
+          <input id="fly" type="radio" name="radio" onchange="window.location.href='checks/checklist4.html'">
+          <div class="radio-tile">
+            <ion-icon name="book-outline"></ion-icon>
+            <label for="Abril">Abril</label>
+          </div>
+        </div>
+
+        <div class="input-container">
+          <input id="fly" type="radio" name="radio" onchange="window.location.href='checks/checklist5.html'">
+          <div class="radio-tile">
+            <ion-icon name="book-outline"></ion-icon>
+            <label for="Maio">Maio</label>
+          </div>
+        </div>
+
+        <div class="input-container">
+          <input id="fly" type="radio" name="radio" onchange="window.location.href='checks/checklist6.html'">
+          <div class="radio-tile">
+            <ion-icon name="book-outline"></ion-icon>
+            <label for="Junho">Junho</label>
+          </div>
+        </div>
+
+        <div class="input-container">
+          <input id="fly" type="radio" name="radio" onchange="window.location.href='checks/checklist7.html'">
+          <div class="radio-tile">
+            <ion-icon name="book-outline"></ion-icon>
+            <label for="Julho">Julho</label>
+          </div>
+        </div>
+
+        <div class="input-container">
+          <input id="fly" type="radio" name="radio" onchange="window.location.href='checks/checklist8.html'">
+          <div class="radio-tile">
+            <ion-icon name="book-outline"></ion-icon>
+            <label for="Agosto">Agosto</label>
+          </div>
+        </div>
+
+        <div class="input-container">
+          <input id="fly" type="radio" name="radio" onchange="window.location.href='checks/checklist9.html'">
+          <div class="radio-tile">
+            <ion-icon name="book-outline"></ion-icon>
+            <label for="Setembro">Setembro</label>
+          </div>
+        </div>
+
+        <div class="input-container">
+          <input id="fly" type="radio" name="radio" onchange="window.location.href='checks/checklist10.html'">
+          <div class="radio-tile">
+            <ion-icon name="book-outline"></ion-icon>
+            <label for="Outubro">Outubro</label>
+          </div>
+        </div>
+
+        <div class="input-container">
+          <input id="fly" type="radio" name="radio" onchange="window.location.href='checks/checklist11.html'">
+          <div class="radio-tile">
+            <ion-icon name="book-outline"></ion-icon>
+            <label for="Novembro">Novembro</label>
+          </div>
+        </div>
+
+        <div class="input-container">
+          <input id="fly" type="radio" name="radio" onchange="window.location.href='checks/checklist12.html'">
+          <div class="radio-tile">
+            <ion-icon name="book-outline"></ion-icon>
+            <label for="Dezembro">Dezembro</label>
+          </div>
+        </div>
+
+       
+
+      </div>
+    </div>
+ 
+     <!-- Botão para zerar a checklist -->
+     <button onclick="resetChecklist()">Zerar Checklist</button>
+    <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+    <script>
+      function resetChecklist() {
+        Swal.fire({
+		title: "Deseja mesmo resetar a checklist?",
+		text: "Esta ação não pode ser desfeita!",
+		icon: "warning",
+		showCancelButton: true,
+		confirmButtonColor: "#3085d6",
+		cancelButtonColor: "#d33",
+		confirmButtonText: "Confirmar",
+		cancelButtonText: "Cancelar",
+	}).then(async (result) => {
+		if (result.isConfirmed) {
+			const res = await fetch(
+				window.location.origin + "/checklist/",
+				{ method: "DELETE" },
+			);
+
+			if (res.ok) {
+					Swal.fire({
+						title: "Sucesso!",
+						text: "A checklist foi resetada com sucesso!",
+						icon: "success",
+					});
+			} else {
+				Swal.fire({
+					title: "Erro!",
+					text: "Ocorreu um erro ao resetar a checklist!",
+					icon: "error",
+				});
+			}
+		}
+	});
+      }
+    </script>
+  </body>
+</html>

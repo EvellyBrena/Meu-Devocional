@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<!-- Coding By CodingNepal - youtube.com/codingnepal -->
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">  
+    <title>Minhas Anotações</title>
+    <link rel="stylesheet" href="notas.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Iconscout Link For Icons -->
+    <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.0/css/line.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  </head>
+  <body>
+    <div class="popup-box">
+      <div class="popup">
+        <div class="content">
+          <header>
+            <p>Adicionar Nota </p>
+            <i class="uil uil-times"></i>
+          </header>
+          <form action="/annotations" method="post">
+            <div class="row title">
+              <label>Título</label>
+              <input type="text" spellcheck="false" id="title" name="title">
+            </div>
+            <div class="row description">
+              <label>Descrição</label>
+              <textarea spellcheck="false" id="description" name="description"></textarea>
+            </div>
+         
+            <button type="submit"> Adicione uma nota </button>
+          
+          </form>
+        </div>
+      </div>
+    </div>
+    <div class="text-bx">
+   <br> <b> <h1> Minhas Anotações </h1></b> <br>
+         <p>
+          <i>Aqui você pode fazer algumas anotações sobre o seu devocional! </i>
+         </p>
+    </div>
+    <div class="img-bx">
+        <img src="bloco.png">
+    </div>
+    <div class="wrapper">
+      <li class="add-box">
+        <div class="icon"><i class="uil uil-plus"></i></div>
+        <p>Adicionar nota</p>
+      </li>
+    </div>
+
+    <script src="notas.js"></script>
+
+  </body>
+</html>
