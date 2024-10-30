@@ -105,7 +105,7 @@ input:checked+.radio-tile label {
 }
 
 /* Estilo do botão */
-button {
+#zerarchecklist {
 	display: block;
 	width: 100px;
 	height: 100px;
@@ -123,7 +123,7 @@ button {
   }
   
   /* Mudança de cor ao passar o mouse */
-  button:hover {
+  #zerarchecklist:hover {
 	background: linear-gradient(to right, #f2b5d4,  #68d8d6); /* Gradiente escurecido ao passar o mouse */
   }
   
@@ -136,7 +136,7 @@ button {
 	  height: auto;
 	}
   
-	button {
+	#zerarchecklist {
 	  width: 80px;
 	  height: 80px;
 	}
