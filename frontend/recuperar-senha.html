@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="login.css">
+    <title>Recuperação de Senha</title>
+</head>
+
+<body>
+    <div class="container">
+        <div class="form">
+            <h1>Recuperar Senha</h1>
+            <form id="recover-form">
+                <div class="input-group">
+                    <div class="input-box">
+                        <label for="email">E-mail</label>
+                        <input id="email" type="email" name="email" placeholder="Digite seu e-mail" required>
+                    </div>
+                </div>
+                <div class="continue-button">
+                    <button type="submit">Enviar Instruções</button>
+                </div>
+            </form>
+            <br>
+            <div class="login-link">
+                <p><a href="login.html">Voltar</a></p>
+            </div>
+        </div>
+    </div>
+    <script>
+        document.getElementById("recover-form").addEventListener("submit", async (ev) => {
+            ev.preventDefault();
+            const email = document.getElementById("email").value;
+
+            const res = await fetch("/esqueci-senha", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ email })
+            });
+
+            if (String(res.status).startsWith("2")) {
+                alert("Instruções para recuperação de senha enviadas para o seu e-mail.");
+            } else {
+                alert("Erro ao enviar instruções. Verifique se o e-mail está correto.");
+            }
+        });
+    </script>
+</body>
+
+</html>

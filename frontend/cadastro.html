@@ -15,7 +15,7 @@
             <img src="login.png" alt="">
         </div>
         <div class="form">
-            <form action="/register" method="post">
+            <form id="cadastro-form">
                 <div class="form-header">
                     <div class="title">
                         <h1>Faça o Seu Cadastro</h1>
@@ -37,8 +37,8 @@
                     </div>
 
                     <div class="input-box">
-                        <label for="number">Celular</label>
-                        <input id="number" type="tel" name="cell_phone" placeholder="(xx) xxxx-xxxx" required>
+                        <label for="cell_phone">Celular</label>
+                        <input id="cell_phone" type="tel" name="cell_phone" placeholder="(xx) xxxx-xxxx" required>
                     </div>
 
                     <div class="input-box">
@@ -80,6 +80,40 @@
             </form>
         </div>
     </div>
+
+    <script>
+        document.getElementById("cadastro-form").addEventListener("submit", async (ev) => {
+            ev.preventDefault();
+            const firstname = document.getElementById("firstname").value;
+            const lastname = document.getElementById("lastname").value;
+            const email = document.getElementById("email").value;
+            const cell_phone = document.getElementById("cell_phone").value;
+            const password = document.getElementById("password").value;
+            const confirmPassword = document.getElementById("confirmPassword").value;
+            const gender = document.querySelector(`input[name="gender"]:checked`).value;
+
+            if (password !== confirmPassword) {
+                alert("As senhas não coincidem.");
+                return;
+            }
+
+            const res = await fetch("/register", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ firstname, lastname, email, cell_phone, password, gender })
+            });
+            const result = await res.json()
+
+            if (String(res.status).startsWith("2")) {
+                alert("Cadastro realizado com sucesso!");
+                window.location.href = "login.html";
+            } else {
+                alert(result.message);
+            }
+        });
+    </script>
 </body>
 
 </html>

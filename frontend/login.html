@@ -20,8 +20,8 @@
                 <div class="form-header">
                     <div class="title">
                         <h1>Faça o Seu Login</h1>
-                 <br>       
-                   
+                    </div>
+                </div>
                 <div class="input-group">
                     <div class="input-box">
                         <label for="email">E-mail</label>
@@ -38,41 +38,44 @@
 
                 <div class="continue-button">
                     <button type="submit">Entrar</button>
-            
                 </div>
             </form>
-            <br> 
-         <!-- Div para o cadastro -->
-         <div class="register-link">
-            <p>Ainda não tem uma conta? <a href="cadastro.html">Crie uma conta</a></p>
+            <br>
+            <!-- Div para o cadastro -->
+            <div class="register-link">
+                <p>Ainda não tem uma conta? <a href="cadastro.html">Crie uma conta</a></p>
+            </div>
+            <!-- Link para recuperação de senha -->
+            <div class="recover-link">
+                <p><a href="recuperar-senha.html">Esqueci a senha</a></p>
+            </div>
         </div>
     </div>
-</div>
-<script>
-    document.getElementById("form").addEventListener("submit", async (ev) => {
-        ev.preventDefault();
-        const email = document.getElementById("email").value;
-        const password = document.getElementById("password").value;
+    <script>
+        document.getElementById("form").addEventListener("submit", async (ev) => {
+            ev.preventDefault();
+            const email = document.getElementById("email").value;
+            const password = document.getElementById("password").value;
 
-        const res = await fetch("/login", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({ email, password })
-        });
-
-        if (String(res.status).startsWith("2")) {
-            window.location.href = "/";
-        } else {
-            Swal.fire({
-                icon: "error",
-                title: "Oops...",
-                text: (await res.json())?.message ?? "Ocorreu um erro inesperado"
+            const res = await fetch("/login", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ email, password })
             });
-        }
-    });
-</script>
+
+            if (String(res.status).startsWith("2")) {
+                window.location.href = "/";
+            } else {
+                Swal.fire({
+                    icon: "error",
+                    title: "Oops...",
+                    text: (await res.json())?.message ?? "Ocorreu um erro inesperado"
+                });
+            }
+        });
+    </script>
 </body>
 
 </html>

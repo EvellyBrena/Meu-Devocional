@@ -43,6 +43,12 @@ const authMiddleware: Handler = (req, res, next) => {
 app.post("/register", async (req, res) => {
 	const { email, password, cell_phone, gender, firstname, lastname } = req.body;
 
+	const user = await prisma.user.findFirst({ where: { email: email as string } })
+
+	if (user) {
+		return res.status(400).json({ message: "Já existe um usuário com esse email!" });
+	}
+
 	const hashedPassword = await bcrypt.hash(password, 10);
 
 	await prisma.user.create({
@@ -203,7 +209,7 @@ app.get("/recuperar-senha", (req, res) => {
 		return res.status(400).json({ message: "Token inválido" })
 	}
 
-	res.json({ status: "ok" })
+	res.redirect(`/mudar-senha.html?token=${token}`)
 })
 
 app.post("/mudar-senha", async (req, res) => {
@@ -211,7 +217,7 @@ app.post("/mudar-senha", async (req, res) => {
 	const { senha } = req.body
 
 	if (!senha) {
-		res.status(400).json({ message: "Digite uma senha válida!" })
+		return res.status(400).json({ message: "Digite uma senha válida!" })
 	}
 
 	if (!token || typeof token !== "string") {
@@ -229,7 +235,7 @@ app.post("/mudar-senha", async (req, res) => {
 		data: { password: await bcrypt.hash(senha, 10) }
 	})
 
-	res.json({ status: "ok" })
+	res.redirect("/login.html")
 })
 
 app.get("*", express.static("frontend"));
