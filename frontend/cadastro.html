@@ -106,7 +106,7 @@
             });
             const result = await res.json()
 
-            if (String(res.status).startsWith("2")) {
+            if (res.ok) {
                 window.location.href = "/login.html";
                 alert("Cadastro realizado com sucesso!");
             } else {
