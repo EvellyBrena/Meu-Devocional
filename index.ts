@@ -61,7 +61,7 @@ app.post("/register", async (req, res) => {
 		},
 	});
 
-	res.redirect("/login.html");
+	res.json({ message: "Usuário criado com sucesso!" });
 });
 
 // Rota para login do usuário
