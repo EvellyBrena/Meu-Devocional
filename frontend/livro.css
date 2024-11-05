@@ -45,3 +45,9 @@ body {
 	margin: 0;
 	padding: 20px;
 }
+
+#container-capitulos {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}

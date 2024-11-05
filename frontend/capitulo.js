@@ -13,9 +13,11 @@ fetch(
 	.then((response) => response.json())
 	.then((capitulo) => {
 		const boxversiculos = document.getElementById("versiculos");
+        const boxcapitulo = document.getElementById("capitulo");
 
-		const versiculos = capitulo.verses;
-
+        boxcapitulo.textContent = `${capitulo.book.name} ${capitulo.chapter.number}`
+		const versiculos = capitulo.verses; 
+		
 		versiculos.forEach((versiculo) => {
 			const versiculoItem = document.createElement("li");
 			versiculoItem.textContent = versiculo.text;

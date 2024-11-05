@@ -27,18 +27,10 @@ fetch("https://www.abibliadigital.com.br/api/books", {
 				book.testament.toLowerCase().includes(testamento.toLowerCase()),
 			)
 			.forEach((book) => {
-				const bookItem = document.createElement("div");
+				const bookItem = document.createElement("a");
+				bookItem.href = `livro.html#${book.abbrev.pt}`;
 				bookItem.classList.add("book-item");
-
-				const bookTitle = document.createElement("h3");
-				bookTitle.textContent = book.name;
-
-				const bookLink = document.createElement("a");
-				bookLink.href = `livro.html#${book.abbrev.pt}`;
-				bookLink.textContent = ">>";
-
-				bookItem.appendChild(bookTitle);
-				bookItem.appendChild(bookLink);
+				bookItem.textContent = book.name
 
 				bookList.appendChild(bookItem);
 			});

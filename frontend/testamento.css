@@ -41,19 +41,9 @@ body {
 	justify-content: space-between;
 	align-items: center;
 	color: #f2b5d4; /* Cor da letra dos itens da lista */
-}
-
-/* Estilo para os títulos dos livros */
-.book-item h3 {
-	margin: 0;
 	font-size: 1.2em;
-}
-
-/* Estilo para os links dos livros */
-.book-item a {
-	color: #f2b5d4; /* Cor da letra dos links */
 	text-decoration: none;
-	font-size: 1em;
+	font-weight: 600;
 }
 
 /* Estilo para os últimos itens da lista (sem borda inferior) */

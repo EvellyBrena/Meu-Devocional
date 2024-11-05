@@ -91,12 +91,58 @@ addBox.addEventListener("click", () => {
 	if (window.innerWidth > 660) titleTag.focus();
 });
 
+const showLoading = function(acao, titiloCarregamento, tituloSucesso, tituloErro) {
+	Swal.fire({
+	  title: titiloCarregamento,
+	  allowEscapeKey: false,
+	  allowOutsideClick: false,
+	  didOpen: () => {
+		Swal.showLoading();
+		acao().then(Swal.close)
+	  }
+	}).then(
+	  () => {
+		showNotes()
+		popupBox.classList.remove("show")
+		document.querySelector("body").style.overflow = "visible";
+		Swal.fire({ 
+		  toast: true,
+          position: "top-end",
+		  title: tituloSucesso,
+		  icon: 'success',
+		  timer: 3000,
+          timerProgressBar: true,
+		  showConfirmButton: false
+		})
+	  }
+	)
+  };
+
 closeIcon.addEventListener("click", () => {
 	isUpdate = false;
 	titleTag.value = descTag.value = "";
 	popupBox.classList.remove("show");
 	document.querySelector("body").style.overflow = "auto";
 });
+
+document.getElementById("adicionarNota").addEventListener("submit", (ev) => {
+	ev.preventDefault()
+	showLoading(
+		async () =>  fetch(window.location.origin + "/annotations", {
+			method: "POST",
+			body: JSON.stringify({
+				title: document.getElementById("title").value,
+				description: document.getElementById("description").value
+			}),
+			headers: {
+				"Content-Type": "application/json"
+			}
+		}),
+		"Adicionando nota",
+		"Nota adicionada com sucesso",
+		"Ocorreu um erro ao adicionar a nota"
+	)
+})
 
 async function showNotes() {
 	const res = await fetch(window.location.origin + "/annotations");
@@ -126,3 +172,5 @@ async function showNotes() {
 	});
 }
 showNotes();
+
+

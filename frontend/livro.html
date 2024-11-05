@@ -9,7 +9,9 @@
 </head>
 <body>
     <h1 id="nome"></h1>
-    <div id="capitulos"></div>
+    <div id="container-capitulos">
+        <div id="capitulos"></div>
+    </div>
     <script>
         fetch("https://www.abibliadigital.com.br/api/books/" + window.location.hash.replace("#", ""), {
             headers: {
