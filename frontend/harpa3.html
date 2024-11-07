@@ -14,6 +14,49 @@
             flex-direction: column;
             justify-content: space-between; 
         }
+        nav{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 100px;
+}
+nav .logo a{
+    font-size: 30px;
+    font-weight: bold;
+    color: #68d8d6;
+    text-decoration:overline;
+}
+
+nav ul{
+    display: flex;
+    list-style: none;
+    align-items: center;
+}
+nav ul li{
+    padding: 0 15px;
+}
+nav ul li a{
+    text-decoration: none;
+    font-size: 17px;
+    text-transform: uppercase;
+    color:#f2b5d4;
+}
+nav ul button{
+    border: none;
+    background-color: #f2b5d4;
+    color: #f5efff;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 16px;
+    letter-spacing: 1px;
+    margin-left: 20px;
+    cursor: pointer;
+}
+nav .menu-icon{
+  
+  display: none;
+  cursor: pointer;
+}
 
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
         *{
@@ -90,6 +133,27 @@
     </style>
 </head>
 <body>
+     <!-- nav -->
+     <nav>
+        <div class="logo">
+          <a href="index.html">Meu Devocional</a>
+        </div>
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="Biblia.html">Bíblia</a></li>
+          <li><a href="harpa.html">Harpa</a></li>
+          <li><a href="notas.html">Anotações</a></li>
+          <li><a href="planodeleitura.html">Plano de Leitura</a></li>
+          <li><a href="login.html">Login</a></li>
+          <li><a href="comecando.html"><button>Começando</button></a></li>
+          
+        </ul>
+        <div class="menu-icon">
+          <img src="menuu.png">
+  
+        </div>
+      </nav>
+      <!-- end nav -->
     <div class="text-bx">
         <h1>Harpa Cristã</h1>
     <br>
@@ -225,4 +289,36 @@
        
     </footer>
 </body>
+ <!-- footer col-->
+ <div class="footer-col">
+    <h4>Empresa</h4>
+    <ul>
+      <li><a href="comecando.html"> Quem somos </a></li>
+      <li><a href="index.html"> nossos serviços </a></li>
+     
+
+  </div>
+
+  <div class="footer-col">
+    <h4>Redes Sociais</h4>
+    <div class="medias-socias">
+      <a href="https://www.youtube.com/@evelly_brena"> <i class="fa fa-youtube-play"></i> </a>
+      <a href="https://www.instagram.com/meu_devocional._?igsh=MTRxNXF6dWI3OWoyNA=="> <i
+          class="fa fa-instagram"></i> </a>
+      <a href="https://chat.whatsapp.com/LxG5o8mNfhYHzWsZ2MrMSo"> <i class="fa fa-whatsapp"></i> </a>
+    </div>
+
+  </div>
+
+  <div class="text">
+
+    <ul>
+   <p>
+      ©2024 Meu Devocional.  </p>
+    
+
+
+  </div>
+
+  <!--end footer col-->
 </html>

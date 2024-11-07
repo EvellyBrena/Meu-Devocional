@@ -5,6 +5,49 @@
 *  @modified 2022-09-18 13:20:06
 *  @tutorial https://youtu.be/UShd9wHTR-o
 */
+nav{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 100px;
+}
+nav .logo a{
+  font-size: 30px;
+  font-weight: bold;
+  color: #68d8d6;
+  text-decoration:overline;
+}
+
+nav ul{
+  display: flex;
+  list-style: none;
+  align-items: center;
+}
+nav ul li{
+  padding: 0 15px;
+}
+nav ul li a{
+  text-decoration: none;
+  font-size: 17px;
+  text-transform: uppercase;
+  color:#f2b5d4;
+}
+nav ul button{
+  border: none;
+  background-color: #f2b5d4;
+  color: #f5efff;
+  padding: 10px 20px;
+  border-radius: 5px;
+  font-size: 16px;
+  letter-spacing: 1px;
+  margin-left: 20px;
+  cursor: pointer;
+}
+nav .menu-icon{
+
+display: none;
+cursor: pointer;
+}
 .text-bx {
     color: #f49cbb;
     font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
