@@ -172,7 +172,7 @@ main{
         color: #f49cbb;
     }
     nav ul button{
-        background-color: #f49cbb
+        background-color: #f49cbb;
         font-size: 18px;
         margin: 10px;
     }
@@ -191,8 +191,6 @@ main{
         justify-content: center;
     }
 }
-
-
 
 
 footer{
