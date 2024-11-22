@@ -6,6 +6,7 @@ import express, { type Handler } from "express";
 import jwt from "jsonwebtoken";
 import { Resend } from "resend"
 import dotenv from "dotenv"
+import harpaApp from "./harpa-api/app"
 
 dotenv.config()
 
@@ -25,6 +26,8 @@ const PORT = process.env.PORT || 3000;
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
+
+// app.use("/harpa", harpaApp)
 
 const authMiddleware: Handler = (req, res, next) => {
 	const token = req.cookies["token"];
