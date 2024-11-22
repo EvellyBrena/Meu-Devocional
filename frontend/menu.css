@@ -1,4 +1,17 @@
-#menu ul
+#menu svg {
+    width: 15px;
+    fill: aqua;
+}
 
+#menu a {
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    color: pink;
+    font-weight: bold;
+}
 
-
+#menu {
+    position: sticky;
+}
