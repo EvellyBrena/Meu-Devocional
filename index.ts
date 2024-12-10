@@ -6,7 +6,6 @@ import jwt from "jsonwebtoken";
 import { Resend } from "resend"
 import dotenv from "dotenv"
 import compression from "compression"
-import expressStaticGzip from "express-static-gzip";
 import { Database } from "bun:sqlite";
 
 const olddb = new Database("data/biblia_harpa.sqlite", { readonly: true });
@@ -385,18 +384,7 @@ app.get("/harpa/hinos/:numero", async (req, res) => {
   });
 });
 
-if (process.env.NODE_ENV === "production") {
-  app.use(expressStaticGzip("dist", {
-    enableBrotli: true,
-    orderPreference: ["br", "gz"],
-    serveStatic: {
-      maxAge: "1y",
-      immutable: true,
-    },
-  }));
-} else {
-  app.get("*", express.static("frontend"));
-}
+app.get("*", express.static("frontend"));
 
 app.listen(PORT, () => {
   console.log("Server is running on http://localhost:3000");
