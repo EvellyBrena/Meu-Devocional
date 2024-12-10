@@ -15,6 +15,7 @@ services:
       - JWT_SECRET=${JWT_SECRET}
       - SITE_URL=${SITE_URL}
       - DATABASE_URL=mongodb://mongo:27017/meudevocional
+      - NODE_ENV=production
     networks:
       - app_net
       - traefik
@@ -43,6 +44,11 @@ services:
       retries: 20
     networks:
       - app_net
+    volumes:
+      - mongo_data:/data/db
+
+volumes:
+  mongo_data:
 
 networks:
   traefik:
