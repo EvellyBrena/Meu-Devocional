@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "bun run --watch index.ts",
-    "start": "sucrase-node index.ts",
+    "start": "bun run index.ts",
     "build": "gulp",
     "postinstall": "prisma generate"
   },
