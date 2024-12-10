@@ -14,40 +14,10 @@ services:
       - RESEND_API_KEY=${RESEND_API_KEY}
       - JWT_SECRET=${JWT_SECRET}
       - SITE_URL=${SITE_URL}
-      - DATABASE_URL=mongodb://mongo:27017/meudevocional
+      - DATABASE_URL=${DATABASE_URL}
     networks:
-      - app_net
       - traefik
-
-  mongo:
-    build:
-      context: .
-      dockerfile: Dockerfile.mongo
-      args:
-        MONGO_VERSION: "latest"
-    environment:
-      MONGO_REPLICA_HOST: mongo
-      MONGO_REPLICA_PORT: 27017
-      MONGO_COMMAND: "mongosh"
-    restart: unless-stopped
-    healthcheck:
-      test:
-        [
-          "CMD",
-          "mongosh",
-          "admin",
-          "--port",
-          "27017",
-          "--eval",
-          "db.adminCommand('ping').ok",
-        ]
-      interval: 5s
-      timeout: 2s
-      retries: 20
-    networks:
-      - app_net
 
 networks:
   traefik:
     external: true
-  app_net:
