@@ -2,80 +2,80 @@
 <html lang="pt-br">
 
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="login.css">
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <title>Formulário</title>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="login.css">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <title>Formulário</title>
 </head>
 
 <body>
-    <div class="container">
-        <div class="form-image">
-            <img src="login.png" alt="">
-        </div>
-        <div class="form">
-            <form id="form">
-                <div class="form-header">
-                    <div class="title">
-                        <h1>Faça o Seu Login</h1>
-                    </div>
-                </div>
-                <div class="input-group">
-                    <div class="input-box">
-                        <label for="email">E-mail</label>
-                        <input id="email" type="email" name="email" placeholder="Digite seu e-mail" required>
-                    </div>
-                </div>
-
-                <div class="input-group">
-                    <div class="input-box">
-                        <label for="password">Senha</label>
-                        <input id="password" type="password" name="password" placeholder="Digite sua senha" required>
-                    </div>
-                </div>
-
-                <div class="continue-button">
-                    <button type="submit">Entrar</button>
-                </div>
-            </form>
-            <br>
-            <!-- Div para o cadastro -->
-            <div class="register-link">
-                <p>Ainda não tem uma conta? <a href="cadastro.html">Crie uma conta</a></p>
-            </div>
-            <!-- Link para recuperação de senha -->
-            <div class="recover-link">
-                <p><a href="recuperar-senha.html">Esqueci a senha</a></p>
-            </div>
-        </div>
+  <div class="container">
+    <div class="form-image">
+      <img src="login.png" alt="">
     </div>
-    <script>
-        document.getElementById("form").addEventListener("submit", async (ev) => {
-            ev.preventDefault();
-            const email = document.getElementById("email").value;
-            const password = document.getElementById("password").value;
+    <div class="form">
+      <form id="form">
+        <div class="form-header">
+          <div class="title">
+            <h1>Faça o Seu Login</h1>
+          </div>
+        </div>
+        <div class="input-group">
+          <div class="input-box">
+            <label for="email">E-mail</label>
+            <input id="email" type="email" name="email" placeholder="Digite seu e-mail" required>
+          </div>
+        </div>
 
-            const res = await fetch("/login", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({ email, password })
-            });
+        <div class="input-group">
+          <div class="input-box">
+            <label for="password">Senha</label>
+            <input id="password" type="password" name="password" placeholder="Digite sua senha" required>
+          </div>
+        </div>
 
-            if (String(res.status).startsWith("2")) {
-                window.location.href = "/";
-            } else {
-                Swal.fire({
-                    icon: "error",
-                    title: "Oops...",
-                    text: (await res.json())?.message ?? "Ocorreu um erro inesperado"
-                });
-            }
+        <div class="continue-button">
+          <button type="submit">Entrar</button>
+        </div>
+      </form>
+      <br>
+      <!-- Div para o cadastro -->
+      <div class="register-link">
+        <p>Ainda não tem uma conta? <a href="cadastro.html">Crie uma conta</a></p>
+      </div>
+      <!-- Link para recuperação de senha -->
+      <div class="recover-link">
+        <p><a href="recuperar-senha.html">Esqueci a senha</a></p>
+      </div>
+    </div>
+  </div>
+  <script>
+    document.getElementById("form").addEventListener("submit", async (ev) => {
+      ev.preventDefault();
+      const email = document.getElementById("email").value;
+      const password = document.getElementById("password").value;
+
+      const res = await fetch("/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ email, password })
+      });
+
+      if (String(res.status).startsWith("2")) {
+        window.location.href = "/";
+      } else {
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: (await res.json()).message ?? "Ocorreu um erro inesperado"
         });
-    </script>
+      }
+    });
+  </script>
 </body>
 
 </html>

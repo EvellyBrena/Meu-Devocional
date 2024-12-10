@@ -1,0 +1,35 @@
+services:
+  app:
+    image: vadolasi/meudevocional:latest
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.meudevocional.rule=Host(`meudevocional.vitordaniel.com`)"
+      - "traefik.http.services.meudevocional.loadbalancer.server.port=3000"
+    deploy:
+      labels:
+        - "traefik.enable=true"
+        - "traefik.http.routers.meudevocional.rule=Host(`meudevocional.vitordaniel.com`)"
+        - "traefik.http.services.meudevocional.loadbalancer.server.port=3000"
+    environment:
+      - RESEND_API_KEY=${RESEND_API_KEY}
+      - JWT_SECRET=${JWT_SECRET}
+      - SITE_URL=${SITE_URL}
+      - DATABASE_URL=mongodb://mongo:27017/meudevocional
+    networks:
+      - app_net
+      - traefik
+
+  mongo:
+    image: mongo:latest
+    networks:
+      - app_net
+
+  redis:
+    image: redis:latest
+    networks:
+      - app_net
+
+networks:
+  traefik:
+    external: true
+  app_net:

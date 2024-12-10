@@ -1,17 +1,19 @@
 #menu svg {
-    width: 15px;
-    fill: aqua;
+  width: 15px;
+  fill: aqua;
 }
 
 #menu a {
-    text-decoration: none;
-    display: flex;
-    align-items: center;
-    gap: 4px;
-    color: pink;
-    font-weight: bold;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  color: pink;
+  font-weight: bold;
 }
 
 #menu {
-    position: sticky;
+  position: sticky;
+  margin-top: 10px;
+  margin-left: 10px;
 }
