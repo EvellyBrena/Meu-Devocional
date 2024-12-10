@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon index.ts",
+    "dev": "bun run --watch index.ts",
     "start": "sucrase-node index.ts",
     "build": "gulp",
     "postinstall": "prisma generate"
@@ -32,7 +32,6 @@
     "gulp-minify-inline": "^1.1.0",
     "gulp-rename": "^2.0.0",
     "gulp-terser": "^2.1.0",
-    "nodemon": "^3.1.4",
     "prisma": "^5.16.0",
     "sucrase": "^3.35.0",
     "terser": "^5.37.0",
@@ -40,7 +39,6 @@
   },
   "dependencies": {
     "@prisma/client": "^5.16.0",
-    "bcrypt": "^5.1.1",
     "compression": "^1.7.5",
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",

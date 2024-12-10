@@ -2,7 +2,7 @@ import Fuse from "https://cdn.jsdelivr.net/npm/fuse.js@7.0.0/dist/fuse.min.mjs";
 
 let fuse;
 
-fetch(window.location.origin + "/biblia/livros")
+fetch(`${window.location.origin}/biblia/livros`)
   .then((res) => res.json())
   .then((books) => {
     fuse = new Fuse(books, { keys: ["nome"], includeScore: true });
@@ -22,9 +22,9 @@ function handleSearch() {
   } else if (chapter > matchedBooks[0].item.chapters) {
     return alert("Este capitulo não existe");
   } else if (chapter > 0) {
-    window.location.href = `capitulo.html#${matchedBooks[0].abreviacao}-${chapter}`;
+    window.location.href = `capitulo.html#${matchedBooks[0].item.abreviacao}-${chapter}`;
   } else {
-    window.location.href = `livro.html#${matchedBooks[0].abreviacao}`;
+    window.location.href = `livro.html#${matchedBooks[0].item.abreviacao}`;
   }
 }
 

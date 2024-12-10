@@ -1,12 +1,14 @@
-fetch("https://www.abibliadigital.com.br/api/books/" + window.location.hash.replace("#", ""))
+fetch(`${window.location.origin}/biblia/livros/${window.location.hash.replace("#", "")}`)
   .then(response => response.json())
   .then(book => {
     const boxcapitulos = document.querySelector("#capitulos");
 
-    for (let i = 1; i <= book.chapters; i++) {
+    document.querySelector("#nome").textContent = book.nome;
+
+    for (let i = 1; i <= book.capitulos; i++) {
       const capitulo = document.createElement("a");
       capitulo.classList.add("capitulo");
-      capitulo.href = "capitulo.html#" + book.abbrev.pt + "-" + i;
+      capitulo.href = "capitulo.html#" + book.abreviacao + "-" + i;
       capitulo.textContent = i;
       boxcapitulos.appendChild(capitulo)
     }

@@ -1,5 +1,4 @@
 import { PrismaClient } from "@prisma/client";
-import bcrypt from "bcrypt";
 import bodyParser from "body-parser";
 import cookieParser from "cookie-parser";
 import express, { type Handler } from "express";
@@ -9,6 +8,9 @@ import dotenv from "dotenv"
 import compression from "compression"
 import expressStaticGzip from "express-static-gzip";
 import path from "path";
+import { Database } from "bun:sqlite";
+
+const db = new Database("data/biblia_harpa.sqlite", { readonly: true });
 
 declare global {
   namespace Express {
@@ -61,7 +63,7 @@ app.post("/register", async (req, res) => {
     return res.status(400).json({ message: "Já existe um usuário com esse email!" });
   }
 
-  const hashedPassword = await bcrypt.hash(password, 10);
+  const hashedPassword = await Bun.password.hash(password);
 
   await prisma.user.create({
     data: {
@@ -82,7 +84,7 @@ app.post("/login", async (req, res) => {
 
   const user = await prisma.user.findFirst({ where: { email: email.toLowerCase() } });
 
-  if (!user || !(await bcrypt.compare(password, user.password))) {
+  if (!user || !(await Bun.password.verify(password, user.password))) {
     return res.status(401).json({ message: "Credenciais inválidas" });
   }
 
@@ -243,18 +245,54 @@ app.post("/mudar-senha", async (req, res) => {
 
   await prisma.user.updateMany({
     where: { email },
-    data: { password: await bcrypt.hash(senha, 10) }
+    data: { password: await Bun.password.hash(senha) }
   })
 
   res.redirect("/login.html")
 })
 
+class Livro {
+  abreviacao: string;
+  nome: string;
+  testamento: string;
+}
+
+class Capitulo {
+  numero: number;
+  livro: string;
+  nome_livro: string;
+}
+
+class Versiculo {
+  livro: string;
+  capitulo: number;
+  numero: number;
+  texto: string;
+}
+
 app.get("/biblia/livros", async (req, res) => {
   const { testamento } = req.query
 
-  const livros = await prisma.livro.findMany({
-    where: testamento ? { testamento: testamento as string } : {}
-  })
+  let livros: { abreviacao: string, nome: string, testamento: string }[]
+
+  if (testamento) {
+    livros = db.query(`
+      SELECT abreviacao, nome, testamento
+      FROM livro
+      WHERE testamento = $testamento
+    `,
+    )
+      .as(Livro)
+      .all({ $testamento: testamento as string })
+  } else {
+    livros = db.query(`
+      SELECT abreviacao, nome, testamento
+      FROM livro
+    `,
+    )
+      .as(Livro)
+      .all()
+  }
 
   res.json(livros)
 })
@@ -262,9 +300,16 @@ app.get("/biblia/livros", async (req, res) => {
 app.get("/biblia/livros/:abreviacao", async (req, res) => {
   const { abreviacao } = req.params
 
-  const livro = await prisma.livro.findFirst({
-    where: { abreviacao }
-  })
+  // include capítulos count
+  const livro = db.query(`
+    SELECT abreviacao, nome, testamento, COUNT(numero) AS capitulos
+    FROM livro
+    LEFT JOIN capitulo ON livro = abreviacao
+    WHERE abreviacao = $abreviacao
+  `,
+  )
+    .as(Livro)
+    .get({ $abreviacao: abreviacao })
 
   res.json(livro)
 })
@@ -272,35 +317,60 @@ app.get("/biblia/livros/:abreviacao", async (req, res) => {
 app.get("/biblia/livros/:abreviacao/:capitulo", async (req, res) => {
   const { abreviacao, capitulo: numeroCapitulo } = req.params
 
-  const capitulo = await prisma.capitulo.findMany({
-    where: {
-      livro: {
-        abreviacao
-      },
-      numero: parseInt(numeroCapitulo)
-    },
-    include: {
-      livro: true
-    }
-  })
+  const capitulo = db.query(`
+    SELECT numero, livro, nome_livro
+    FROM capitulo
+    WHERE livro = $abreviacao AND numero = $numeroCapitulo
+  `,
+  )
+    .as(Capitulo)
+    .get({ $abreviacao: abreviacao, $numeroCapitulo: numeroCapitulo })
+  
+  const versiculos = db.query(`
+    SELECT livro, capitulo, numero, texto
+    FROM versiculo
+    WHERE livro = $abreviacao AND capitulo = $numeroCapitulo
+  `,
+  )
+    .as(Versiculo)
+    .all({ $abreviacao: abreviacao, $numeroCapitulo: numeroCapitulo })
 
-  res.json(capitulo)
+  res.json({ ...capitulo, versiculos: versiculos.map(versiculo => versiculo.texto.trim()) })
 })
 
-app.get("/harpa/hinos", async (req, res) => {
-  const hinos = await prisma.hino.findMany()
+class Hino {
+  numero: number;
+  titulo: string;
+  coro: string;
+}
 
-  res.json(hinos)
-})
+class Verso {
+  numero: number;
+  texto: string;
+}
 
 app.get("/harpa/hinos/:numero", async (req, res) => {
   const { numero } = req.params
 
-  const hino = await prisma.hino.findFirst({
-    where: { numero: parseInt(numero) }
-  })
+  const hino = db.query(`
+    SELECT numero, titulo, coro
+    FROM hino
+    WHERE numero = $numero
+  `,
+  )
+    .as(Hino)
+    .get({ $numero: numero })
 
-  res.json(hino)
+  const versos = db.query(`
+    SELECT numero, texto
+    FROM verso
+    WHERE hino = $numero
+  `,
+  )
+    .as(Verso)
+    .all({ $numero: numero })
+  
+  res.json({ ...hino, versos: versos.map(verso => verso.texto.trim()) })
 })
 
 if (process.env.NODE_ENV === "production") {

@@ -1,7 +1,7 @@
 import { Database } from "bun:sqlite";
 
 const db = new Database("biblia_harpa.sqlite");
-
+db.exec("PRAGMA journal_mode = WAL;");
 db.exec(`
 CREATE TABLE IF NOT EXISTS "hino" (
   "numero" INTEGER PRIMARY KEY,
@@ -26,6 +26,7 @@ CREATE TABLE IF NOT EXISTS "livro" (
 CREATE TABLE IF NOT EXISTS "capitulo" (
   "numero" INTEGER NOT NULL,
   "livro" INTEGER NOT NULL,
+  "nome_livro" TEXT NOT NULL,
   PRIMARY KEY ("livro", "numero"),
   FOREIGN KEY ("livro") REFERENCES "livro" ("abreviacao")
 );
@@ -46,15 +47,15 @@ const harpa = await Bun.file("harpa.json").json();
 db.transaction(() => {
   for (const [numero, hino] of Object.entries<{ hino: string, coro: string, verses: { [index: number]: string } }>(harpa)) {
     db.run("INSERT INTO hino (numero, titulo, coro) VALUES (?, ?, ?)", [
-      numero + 1,
+      numero,
       hino.hino,
       hino.coro || null
     ]);
 
     for (const [index, verse] of Object.entries(hino.verses)) {
       db.run("INSERT INTO verso (hino, numero, texto) VALUES (?, ?, ?)", [
-        numero + 1,
-        index + 1,
+        numero,
+        index,
         verse
       ]);
     }
@@ -72,9 +73,10 @@ db.transaction(() => {
     ]);
 
     for (const [chapterIndex, chapter] of book.chapters.entries()) {
-      db.run("INSERT INTO capitulo (numero, livro) VALUES (?, ?)", [
+      db.run("INSERT INTO capitulo (numero, livro, nome_livro) VALUES (?, ?, ?)", [
         chapterIndex + 1,
-        book.abbrev
+        book.abbrev,
+        book.name
       ]);
 
       for (const [index, verse] of chapter.entries()) {
