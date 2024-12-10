@@ -373,13 +373,7 @@ app.get("/harpa/hinos/:numero", async (req, res) => {
   res.json({ ...hino, versos: versos.map(verso => verso.texto.trim()) })
 })
 
-if (process.env.NODE_ENV === "production") {
-  app.use("*", expressStaticGzip(path.join(__dirname, "dist"), {
-    enableBrotli: true
-  }));
-} else {
-  app.get("*", express.static("frontend"));
-}
+app.get("*", express.static("frontend"));
 
 app.listen(PORT, () => {
   console.log("Server is running on http://localhost:3000");
