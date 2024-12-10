@@ -7,10 +7,11 @@ import { Resend } from "resend"
 import dotenv from "dotenv"
 import compression from "compression"
 import expressStaticGzip from "express-static-gzip";
-import path from "path";
 import { Database } from "bun:sqlite";
 
-const db = new Database("data/biblia_harpa.sqlite", { readonly: true });
+const olddb = new Database("data/biblia_harpa.sqlite", { readonly: true });
+const contents = olddb.serialize();
+const db = Database.deserialize(contents, true);
 
 declare global {
   namespace Express {
@@ -257,19 +258,6 @@ class Livro {
   testamento: string;
 }
 
-class Capitulo {
-  numero: number;
-  livro: string;
-  nome_livro: string;
-}
-
-class Versiculo {
-  livro: string;
-  capitulo: number;
-  numero: number;
-  texto: string;
-}
-
 app.get("/biblia/livros", async (req, res) => {
   const { testamento } = req.query
 
@@ -300,7 +288,6 @@ app.get("/biblia/livros", async (req, res) => {
 app.get("/biblia/livros/:abreviacao", async (req, res) => {
   const { abreviacao } = req.params
 
-  // include capítulos count
   const livro = db.query(`
     SELECT abreviacao, nome, testamento, COUNT(numero) AS capitulos
     FROM livro
@@ -314,66 +301,102 @@ app.get("/biblia/livros/:abreviacao", async (req, res) => {
   res.json(livro)
 })
 
-app.get("/biblia/livros/:abreviacao/:capitulo", async (req, res) => {
-  const { abreviacao, capitulo: numeroCapitulo } = req.params
-
-  const capitulo = db.query(`
-    SELECT numero, livro, nome_livro
-    FROM capitulo
-    WHERE livro = $abreviacao AND numero = $numeroCapitulo
-  `,
-  )
-    .as(Capitulo)
-    .get({ $abreviacao: abreviacao, $numeroCapitulo: numeroCapitulo })
-  
-  const versiculos = db.query(`
-    SELECT livro, capitulo, numero, texto
-    FROM versiculo
-    WHERE livro = $abreviacao AND capitulo = $numeroCapitulo
-  `,
-  )
-    .as(Versiculo)
-    .all({ $abreviacao: abreviacao, $numeroCapitulo: numeroCapitulo })
-
-  res.json({ ...capitulo, versiculos: versiculos.map(versiculo => versiculo.texto.trim()) })
-})
-
-class Hino {
-  numero: number;
-  titulo: string;
-  coro: string;
+class CapituloWithVersiculos {
+  capitulo_numero: number;
+  livro_abreviacao: string;
+  nome_livro: string;
+  versiculo_numero: number;
+  versiculo_texto: string;
 }
 
-class Verso {
-  numero: number;
-  texto: string;
+app.get("/biblia/livros/:abreviacao/:capitulo", async (req, res) => {
+  const { abreviacao, capitulo: numeroCapitulo } = req.params;
+
+  const results = db.query(`
+    SELECT 
+      c.numero AS capitulo_numero,
+      c.livro AS livro_abreviacao,
+      c.nome_livro,
+      v.numero AS versiculo_numero,
+      v.texto AS versiculo_texto
+    FROM capitulo c
+    JOIN versiculo v ON c.livro = v.livro AND c.numero = v.capitulo
+    WHERE c.livro = $abreviacao AND c.numero = $numeroCapitulo
+    ORDER BY v.numero
+  `)
+    .as(CapituloWithVersiculos)
+    .all({ $abreviacao: abreviacao, $numeroCapitulo: numeroCapitulo });
+
+  if (results.length === 0) {
+    return res.status(404).json({ error: "Capítulo ou versículos não encontrados." });
+  }
+
+  const { capitulo_numero, livro_abreviacao, nome_livro } = results[0];
+
+  const versiculos = results.map(result => result.versiculo_texto.trim());
+
+  res.json({
+    numero: capitulo_numero,
+    livro: livro_abreviacao,
+    nome_livro,
+    versiculos
+  });
+});
+
+class HinoWithVersos {
+  hino_numero: number;
+  hino_titulo: string;
+  hino_coro: string;
+  verso_numero: number;
+  verso_texto: string;
 }
 
 app.get("/harpa/hinos/:numero", async (req, res) => {
-  const { numero } = req.params
+  const { numero } = req.params;
 
-  const hino = db.query(`
-    SELECT numero, titulo, coro
-    FROM hino
-    WHERE numero = $numero
-  `,
-  )
-    .as(Hino)
-    .get({ $numero: numero })
+  const results = db.query(`
+    SELECT 
+      h.numero AS hino_numero,
+      h.titulo AS hino_titulo,
+      h.coro AS hino_coro,
+      v.numero AS verso_numero,
+      v.texto AS verso_texto
+    FROM hino h
+    JOIN verso v ON h.numero = v.hino
+    WHERE h.numero = $numero
+    ORDER BY v.numero
+  `)
+    .as(HinoWithVersos)
+    .all({ $numero: numero });
 
-  const versos = db.query(`
-    SELECT numero, texto
-    FROM verso
-    WHERE hino = $numero
-  `,
-  )
-    .as(Verso)
-    .all({ $numero: numero })
-  
-  res.json({ ...hino, versos: versos.map(verso => verso.texto.trim()) })
-})
+  if (results.length === 0) {
+    return res.status(404).json({ error: "Hino não encontrado." });
+  }
 
-app.get("*", express.static("frontend"));
+  const { hino_numero, hino_titulo, hino_coro } = results[0];
+
+  const versos = results.map(result => result.verso_texto.trim());
+
+  res.json({
+    numero: hino_numero,
+    titulo: hino_titulo,
+    coro: hino_coro,
+    versos
+  });
+});
+
+if (process.env.NODE_ENV === "production") {
+  app.use(expressStaticGzip("dist", {
+    enableBrotli: true,
+    orderPreference: ["br", "gz"],
+    serveStatic: {
+      maxAge: "1y",
+      immutable: true,
+    },
+  }));
+} else {
+  app.get("*", express.static("frontend"));
+}
 
 app.listen(PORT, () => {
   console.log("Server is running on http://localhost:3000");
