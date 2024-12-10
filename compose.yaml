@@ -21,13 +21,10 @@ services:
       - traefik
 
   mongo:
-    build:
-      context: .
-      dockerfile: Dockerfile.mongo
+    image: vadolasi/mongors:latest
     environment:
       MONGO_REPLICA_HOST: mongo
       MONGO_REPLICA_PORT: 27017
-    restart: unless-stopped
     healthcheck:
       test:
         [
