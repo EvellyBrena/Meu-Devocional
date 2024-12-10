@@ -20,7 +20,30 @@ services:
       - traefik
 
   mongo:
-    image: mongo:latest
+    build:
+      context: .
+      dockerfile: Dockerfile.mongo
+      args:
+        MONGO_VERSION: "latest"
+    environment:
+      MONGO_REPLICA_HOST: mongo
+      MONGO_REPLICA_PORT: 27017
+      MONGO_COMMAND: "mongosh"
+    restart: unless-stopped
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "mongosh",
+          "admin",
+          "--port",
+          "27017",
+          "--eval",
+          "db.adminCommand('ping').ok",
+        ]
+      interval: 5s
+      timeout: 2s
+      retries: 20
     networks:
       - app_net
 
